@@ -12,19 +12,24 @@ export default function Home() {
     'https://www.googleapis.com/auth/drive.file',
     'https://www.googleapis.com/auth/script.external_request',
     'https://www.googleapis.com/auth/script.scriptapp',
-  ]
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/drive.metadata',
+    'https://www.googleapis.com/auth/drive.appdata',
+  ];
 
   const autorizationUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
-    scope: SCOPE
-  })
+    scope: SCOPE,
+  });
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
       <h1 className="mb-10 text-5xl">Sheetscontrol</h1>
       <div className="flex gap-2">
         <Button size="sm">Give permission</Button>
-        <Button size="sm">Organise</Button>
+        <Link href="/dashboard">
+          <Button size="sm">Organise</Button>
+        </Link>
         <Link href={autorizationUrl}>
           <Button size="sm">Login To Google</Button>
         </Link>
