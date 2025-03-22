@@ -137,18 +137,15 @@ export default async function Page() {
                   <td className="px-6 py-4">{formatDate(sheet.modifiedTime)}</td>
                   <td className="px-6 py-4">{sheet.permissions?.length || 'None'}</td>
                   <td className="px-6 py-4">
-                    {sheets.map(
-                      (sheet) =>
-                        sheet.id && (
-                          <SheetActions
-                            key={sheet.id}
-                            sheet={{
-                              id: sheet.id,
-                              name: sheet.name || 'Untitled',
-                              // webViewLink: sheet.webViewLink,
-                            }}
-                          />
-                        )
+                    {sheet.id && (
+                      <SheetActions
+                        key={sheet.id}
+                        sheet={{
+                          id: sheet.id,
+                          name: sheet.name || 'Untitled',
+                          // webViewLink: sheet.webViewLink,
+                        }}
+                      />
                     )}
                   </td>
                   <td className="px-6 py-4">—</td>

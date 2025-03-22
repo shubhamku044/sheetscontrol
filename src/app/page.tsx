@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import oauth2Client from '@/utils/google-auth';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { LogoutButton } from '@/components';
+import { LogoutButton, GoogleSignIn } from '@/components';
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -36,13 +36,7 @@ export default async function Home() {
             <Button size="sm">Organise</Button>
           </Link>
         )}
-        {isLoggedIn ? (
-          <LogoutButton />
-        ) : (
-          <Link href={autorizationUrl}>
-            <Button size="sm">Login To Google</Button>
-          </Link>
-        )}
+        {isLoggedIn ? <LogoutButton /> : <GoogleSignIn authorizationUrl={autorizationUrl} />}
       </div>
     </div>
   );
