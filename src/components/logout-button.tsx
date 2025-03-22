@@ -18,7 +18,7 @@ export function LogoutButton() {
       }
 
       toast.success('Successfully logged out');
-      setTimeout(() => router.push('/'), 1000);
+      router.push('/');
     } catch (error) {
       console.log('Error logging out:', error);
       toast.error('Failed to log out');
@@ -28,7 +28,7 @@ export function LogoutButton() {
   return (
     <Button
       onClick={handleLogout}
-      variant="ghost"
+      variant="secondary"
       className="text-destructive hover:text-destructive/80"
     >
       Log Out

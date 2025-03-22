@@ -26,14 +26,8 @@ export async function POST(req: Request) {
       success: true,
       message: 'File moved to trash successfully',
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Trash error:', error);
-    return NextResponse.json(
-      {
-        error: 'Failed to trash file',
-        details: error.message,
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to trash file' }, { status: 500 });
   }
 }

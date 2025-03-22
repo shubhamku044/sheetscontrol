@@ -1,8 +1,13 @@
 import { Button } from '@/components/ui/button';
 import oauth2Client from '@/utils/google-auth';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { LogoutButton } from '@/components';
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const isLoggedIn = cookieStore.has('google_access_token');
+
   const SCOPE = [
     'https://www.googleapis.com/auth/drive.metadata.readonly',
     'https://www.googleapis.com/auth/spreadsheets.readonly',
@@ -26,13 +31,18 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-center justify-center">
       <h1 className="mb-10 text-5xl">Sheetscontrol</h1>
       <div className="flex gap-2">
-        <Button size="sm">Give permission</Button>
-        <Link href="/dashboard">
-          <Button size="sm">Organise</Button>
-        </Link>
-        <Link href={autorizationUrl}>
-          <Button size="sm">Login To Google</Button>
-        </Link>
+        {isLoggedIn && (
+          <Link href="/dashboard">
+            <Button size="sm">Organise</Button>
+          </Link>
+        )}
+        {isLoggedIn ? (
+          <LogoutButton />
+        ) : (
+          <Link href={autorizationUrl}>
+            <Button size="sm">Login To Google</Button>
+          </Link>
+        )}
       </div>
     </div>
   );

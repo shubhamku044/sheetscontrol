@@ -32,11 +32,8 @@ export async function POST(request: Request) {
       success: true,
       message: 'File renamed successfully',
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Rename error:', error);
-    return NextResponse.json(
-      { error: 'Failed to rename file', details: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to rename file' }, { status: 500 });
   }
 }

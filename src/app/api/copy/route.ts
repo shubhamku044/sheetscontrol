@@ -38,11 +38,8 @@ export async function POST(request: Request) {
       newFileId: response.data.id,
       newFileName: newName,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Copy error:', error);
-    return NextResponse.json(
-      { error: 'Failed to copy file', details: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to copy file' }, { status: 500 });
   }
 }

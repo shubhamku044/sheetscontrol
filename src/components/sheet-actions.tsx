@@ -1,4 +1,3 @@
-// components/SheetActions.tsx
 'use client';
 
 import { useState } from 'react';
@@ -23,13 +22,17 @@ interface SheetActionsProps {
 export function SheetActions({ sheet }: SheetActionsProps) {
   const [isRenaming, setIsRenaming] = useState(false);
 
+  console.log('Is renaming', isRenaming);
+
   const handleMakeCopy = async () => {
     try {
+      setIsRenaming(true);
       const response = await fetch('/api/copy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileId: sheet.id }),
       });
+      setIsRenaming(false);
 
       if (!response.ok) throw new Error('Failed to copy');
 
@@ -66,6 +69,7 @@ export function SheetActions({ sheet }: SheetActionsProps) {
       });
       window.location.reload();
     } catch (error) {
+      console.error('Error renaming file:', error);
       toast.error('Error', {
         description: 'Failed to rename file',
       });
@@ -88,9 +92,9 @@ export function SheetActions({ sheet }: SheetActionsProps) {
         description: 'File moved to trash successfully',
       });
 
-      // Refresh the list after a short delay
       setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
+      console.error('Error trashing file:', error);
       toast.error('Error', {
         description: 'Failed to move file to trash',
       });

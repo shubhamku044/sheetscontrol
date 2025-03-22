@@ -21,7 +21,8 @@ export default async function Page() {
       auth: oauth2Client,
       pageSize: 50,
       q: "mimeType='application/vnd.google-apps.spreadsheet'",
-      fields: 'nextPageToken, files(id, name, webViewLink, shared, owners, permissions)',
+      fields:
+        'nextPageToken, files(id, name, webViewLink, thumbnailLink, shared, owners, permissions)',
       orderBy: 'modifiedTime desc',
     });
     console.log('Sheets:', res);
@@ -42,6 +43,17 @@ export default async function Page() {
       </div>
     );
   }
+
+  const formatDate = (dateString?: string | null) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return isNaN(date.getTime())
+      ? 'Invalid Date'
+      : date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+        });
+  };
 
   const stats = [
     { title: 'Owned', value: 13 },
@@ -110,10 +122,7 @@ export default async function Page() {
               {sheets?.map((sheet) => (
                 <tr key={sheet.id} className="hover:bg-muted/50 border-t">
                   <td className="px-6 py-4 font-medium">{sheet.name}</td>
-                  <td className="px-6 py-4">
-                    {/* Mock sheet count - replace with actual data */}
-                    {Math.floor(Math.random() * 5) + 1} ○
-                  </td>
+                  <td className="px-6 py-4">{Math.floor(Math.random() * 5) + 1} ○</td>
                   <td className="px-6 py-4">
                     {sheet.shared ? (
                       sheet.permissions?.some((p) => p.type === 'anyone') ? (
@@ -122,19 +131,25 @@ export default async function Page() {
                         <span>{sheet.owners?.[0].displayName || 'Shared'}</span>
                       )
                     ) : (
-                      <Badge variant="secondary">Private</Badge>
+                      <Badge>Private</Badge>
                     )}
                   </td>
-                  <td className="px-6 py-4">
-                    {/* Format modifiedTime */}
-                    {new Date(sheet.modifiedTime).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </td>
+                  <td className="px-6 py-4">{formatDate(sheet.modifiedTime)}</td>
                   <td className="px-6 py-4">{sheet.permissions?.length || 'None'}</td>
                   <td className="px-6 py-4">
-                    <SheetActions sheet={sheet} />
+                    {sheets.map(
+                      (sheet) =>
+                        sheet.id && (
+                          <SheetActions
+                            key={sheet.id}
+                            sheet={{
+                              id: sheet.id,
+                              name: sheet.name || 'Untitled',
+                              // webViewLink: sheet.webViewLink,
+                            }}
+                          />
+                        )
+                    )}
                   </td>
                   <td className="px-6 py-4">—</td>
                   <td className="px-6 py-4">{Math.random() > 0.5 ? 'Yes' : 'No'}</td>
@@ -143,8 +158,6 @@ export default async function Page() {
             </tbody>
           </table>
         </div>
-
-        {/* Add pagination here if needed */}
       </div>
     </div>
   );
